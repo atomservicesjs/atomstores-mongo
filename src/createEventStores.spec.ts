@@ -1,4 +1,4 @@
-import { Core } from "atomservicescore";
+import { IEventStores } from "atomservicescore";
 import { expect } from "chai";
 import { MongoClient } from "mongodb";
 import { createEventStores } from "./createEventStores";
@@ -32,7 +32,7 @@ describe("createEventStores.ts tests", () => {
   });
 
   describe("#EventStores", () => {
-    let stores: Core.IEventStores;
+    let stores: IEventStores;
 
     describe("#EventStores.queryByID()", () => {
       const scope = "TestScope";

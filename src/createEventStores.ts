@@ -1,8 +1,8 @@
-import { Core } from "atomservicescore";
+import { IEventStores } from "atomservicescore";
 import { IEventStoresConnector } from "./IEventStoresConnector";
 
-export const createEventStores = (connector: IEventStoresConnector): Core.IEventStores => ((Connector): Core.IEventStores => {
-  const stores: Core.IEventStores = {
+export const createEventStores = (connector: IEventStoresConnector): IEventStores => ((Connector): IEventStores => {
+  const stores: IEventStores = {
     queryByID: async (scope, type, eventID) => {
       const collection = await Connector.connect(scope, type);
 
