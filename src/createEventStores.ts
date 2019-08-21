@@ -3,7 +3,7 @@ import { IEventStoresConnector } from "./IEventStoresConnector";
 
 export const createEventStores = (connector: IEventStoresConnector): IEventStores => ((Connector): IEventStores => {
   const stores: IEventStores = {
-    queryByID: async (scope, type, eventID) => {
+    queryByEventID: async (scope, type, eventID) => {
       const collection = await Connector.connect(scope, type);
 
       return collection.findOne({ _id: eventID });
