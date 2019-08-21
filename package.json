@@ -1,6 +1,6 @@
 {
   "name": "atomstores-mongo",
-  "version": "0.6.0-alpha.5",
+  "version": "0.6.0-alpha.8",
   "description": "Providing Event Stores Implementing MongoDB",
   "main": "./lib/index.js",
   "typings": "./typings/index.d.ts",
@@ -31,7 +31,7 @@
   "license": "MIT",
   "repository": "git+https://github.com/atomservicesjs/atomstores-mongo",
   "dependencies": {
-    "atomservicescore": "^0.6.0-alpha.5",
+    "atomservicescore": "^0.6.0-alpha.8",
     "mongodb": "^3.3.0"
   },
   "devDependencies": {
@@ -39,7 +39,7 @@
     "@types/chai": "^4.2.0",
     "@types/mocha": "^5.2.7",
     "@types/mock-require": "^2.0.0",
-    "@types/mongodb": "^3.2.3",
+    "@types/mongodb": "^3.3.0",
     "@types/node": "^12.7.2",
     "@types/sinon": "^7.0.13",
     "chai": "^4.2.0",
@@ -51,7 +51,7 @@
     "sinon": "^7.4.1",
     "source-map-support": "^0.5.13",
     "ts-node": "^8.3.0",
-    "tslint": "^5.18.0",
+    "tslint": "^5.19.0",
     "typescript": "^3.5.3"
   }
 }
