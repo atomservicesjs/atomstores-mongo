@@ -19,7 +19,7 @@ export const createStoresConnector = (options: IStoresConnectorOptions = {}): IE
     connect: async (scope, type) => {
       await Client.connect();
 
-      return Client.db(`${scope}-events`).collection(type);
+      return Client.db(`${scope.toLowerCase()}-events`).collection(type);
     },
   };
 })(options);
