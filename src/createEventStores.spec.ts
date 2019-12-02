@@ -44,30 +44,36 @@ describe("createEventStores.ts tests", () => {
       it("expect to query an event by eventID", async () => {
         // arranges
         const createdAt = new Date();
+        const createdBy = "creator";
         const eventID = "A1234567890";
         const name = "TestEventName";
         const type = "TestType";
         const aggregateID = "1234567890";
+        const payloads = {};
         stores = createEventStores(connector);
         const expected = {
           _createdAt: createdAt,
+          _createdBy: createdBy,
           _id: eventID,
           _version: 1,
           aggregateID,
           name,
+          payloads,
           type,
         };
         await stores.storeEvent(scope, {
           _createdAt: createdAt,
+          _createdBy: createdBy,
           _id: eventID,
           _version: 1,
           aggregateID,
           name,
+          payloads,
           type,
         });
 
         // acts
-        const result = await stores.queryByID(scope, type, eventID);
+        const result = await stores.queryByEventID(scope, type, eventID);
 
         // asserts
         expect(result).to.deep.equal(expected);
@@ -102,6 +108,7 @@ describe("createEventStores.ts tests", () => {
       it("expect to query a current version, #1", async () => {
         // arranges
         const createdAt = new Date();
+        const createdBy = "creator";
         const eventID = "A1234567890";
         const name = "TestEventName";
         const type = "TestType";
@@ -109,10 +116,12 @@ describe("createEventStores.ts tests", () => {
         stores = createEventStores(connector);
         await stores.storeEvent(scope, {
           _createdAt: createdAt,
+          _createdBy: createdBy,
           _id: eventID,
           _version: 1,
           aggregateID,
           name,
+          payloads: {},
           type,
         });
         const expected = {
@@ -131,6 +140,7 @@ describe("createEventStores.ts tests", () => {
       it("expect to query a current version, #2", async () => {
         // arranges
         const createdAt = new Date();
+        const createdBy = "creator";
         const eventID1 = "A1234567890";
         const eventID2 = "B1234567890";
         const eventID3 = "C1234567890";
@@ -140,26 +150,32 @@ describe("createEventStores.ts tests", () => {
         stores = createEventStores(connector);
         await stores.storeEvent(scope, {
           _createdAt: createdAt,
+          _createdBy: createdBy,
           _id: eventID1,
           _version: 1,
           aggregateID,
           name,
+          payloads: {},
           type,
         });
         await stores.storeEvent(scope, {
           _createdAt: createdAt,
+          _createdBy: createdBy,
           _id: eventID2,
           _version: 2,
           aggregateID,
           name,
+          payloads: {},
           type,
         });
         await stores.storeEvent(scope, {
           _createdAt: createdAt,
+          _createdBy: createdBy,
           _id: eventID3,
           _version: 3,
           aggregateID,
           name,
+          payloads: {},
           type,
         });
         const expected = {
@@ -200,25 +216,31 @@ describe("createEventStores.ts tests", () => {
       it("expect to query an array of events by aggregateID, #2", async () => {
         // arranges
         const createdAt = new Date();
+        const createdBy = "creator";
         const eventID = "X1234567890";
         const name = "TestEventName";
         const type = "TestType";
         const aggregateID = "1234567890";
+        const payloads = {};
         stores = createEventStores(connector);
         await stores.storeEvent(scope, {
           _createdAt: createdAt,
+          _createdBy: createdBy,
           _id: eventID,
           _version: 1,
           aggregateID,
           name,
+          payloads,
           type,
         });
         const expected = [{
           _createdAt: createdAt,
+          _createdBy: createdBy,
           _id: eventID,
           _version: 1,
           aggregateID,
           name,
+          payloads,
           type,
         }];
 
@@ -260,6 +282,7 @@ describe("createEventStores.ts tests", () => {
       it("expect to query an array of events by aggregateID with options, #3", async () => {
         // arranges
         const createdAt = new Date();
+        const createdBy = "creator";
         const name = "TestEventName";
         const type = "TestType";
         const aggregateID = "1234567890A";
@@ -271,10 +294,12 @@ describe("createEventStores.ts tests", () => {
           const eventID = `event-${i}`;
           const event = {
             _createdAt: createdAt,
+            _createdBy: createdBy,
             _id: eventID,
             _version: i,
             aggregateID,
             name,
+            payloads: {},
             type,
           };
           expected.push(event);
@@ -293,6 +318,7 @@ describe("createEventStores.ts tests", () => {
       it("expect to query an array of events by aggregateID with options, #4", async () => {
         // arranges
         const createdAt = new Date();
+        const createdBy = "creator";
         const name = "TestEventName";
         const type = "TestType";
         const aggregateID = "1234567890A";
@@ -304,10 +330,12 @@ describe("createEventStores.ts tests", () => {
           const eventID = `event-${i}`;
           const event = {
             _createdAt: createdAt,
+            _createdBy: createdBy,
             _id: eventID,
             _version: i,
             aggregateID,
             name,
+            payloads: {},
             type,
           };
           if (i >= 5) {
@@ -328,6 +356,7 @@ describe("createEventStores.ts tests", () => {
       it("expect to query an array of events by aggregateID with options, #5", async () => {
         // arranges
         const createdAt = new Date();
+        const createdBy = "creator";
         const name = "TestEventName";
         const type = "TestType";
         const aggregateID = "1234567890A";
@@ -341,10 +370,12 @@ describe("createEventStores.ts tests", () => {
           const eventID = `event-${i}`;
           const event = {
             _createdAt: createdAt,
+            _createdBy: createdBy,
             _id: eventID,
             _version: i,
             aggregateID,
             name,
+            payloads: {},
             type,
           };
 
@@ -376,6 +407,7 @@ describe("createEventStores.ts tests", () => {
       it("expect to store an event into stores", async () => {
         // arranges
         const createdAt = new Date();
+        const createdBy = "creator";
         const eventID = "A1234567890";
         const name = "TestEventName";
         const type = "TestType";
@@ -385,10 +417,12 @@ describe("createEventStores.ts tests", () => {
         // acts
         const result = await stores.storeEvent(scope, {
           _createdAt: createdAt,
+          _createdBy: createdBy,
           _id: eventID,
           _version: 1,
           aggregateID,
           name,
+          payloads: {},
           type,
         });
 

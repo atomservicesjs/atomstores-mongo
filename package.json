@@ -1,6 +1,6 @@
 {
   "name": "atomstores-mongo",
-  "version": "0.6.0-alpha.15",
+  "version": "0.7.0-alpha.1",
   "description": "Providing Event Stores Implementing MongoDB",
   "main": "./lib/index.js",
   "typings": "./typings/index.d.ts",
@@ -30,12 +30,15 @@
   "author": "Architecode Corporation",
   "license": "MIT",
   "repository": "git+https://github.com/atomservicesjs/atomstores-mongo",
+  "peerDependencies": {
+    "mongodb": "3.x"
+  },
   "dependencies": {
-    "atomservicescore": "^0.6.0-alpha.15",
-    "mongodb": "^3.3.2"
+    "atomservicescore": "^0.7.0-alpha.33"
   },
   "devDependencies": {
-    "@types/mongodb": "^3.3.1",
-    "archdevts": "*"
+    "@types/mongodb": "^3.3.11",
+    "archdevts": "^19.11.22",
+    "mongodb": "^3.3.5"
   }
 }
