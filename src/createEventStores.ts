@@ -1,4 +1,5 @@
 import { IEventStores } from "atomservicescore";
+import { createCursor } from "./core/createCursor";
 import { IEventStoresConnector } from "./IEventStoresConnector";
 
 export const createEventStores = (connector: IEventStoresConnector): IEventStores => ((Connector): IEventStores => {
@@ -10,17 +11,18 @@ export const createEventStores = (connector: IEventStoresConnector): IEventStore
     },
     queryCurrentVersion: async (scope, type, aggregateID) => {
       const collection = await Connector.connect(scope, type);
-      const result = await collection.aggregate([
+      const list = await collection.aggregate([
         { $match: { aggregateID } },
         { $sort: { _version: -1 } },
         { $limit: 1 },
       ]).toArray();
 
-      if (result.length > 0) {
+      if (list.length > 0) {
+        const item = list[0];
         return {
           aggregateID,
           type,
-          version: result[0]._version,
+          version: item._version,
         };
       } else {
         return {
@@ -56,10 +58,20 @@ export const createEventStores = (connector: IEventStoresConnector): IEventStore
           aggregate.push({ $limit });
         }
 
-        return collection.aggregate(aggregate).toArray();
+        const cursor = collection.aggregate(aggregate);
+
+        return createCursor.fromAggregation(cursor);
       } else {
-        return collection.find({ aggregateID }).toArray();
+        const cursor = collection.find({ aggregateID });
+
+        return createCursor.fromFind(cursor);
       }
+    },
+    queryEventsByDateTime: async (scope, type, options) => {
+      const collection = await Connector.connect(scope, type);
+      const cursor = collection.find({});
+
+      return createCursor.fromFind(cursor);
     },
     storeEvent: async (scope, event) => {
       const collection = await Connector.connect(scope, event.type);

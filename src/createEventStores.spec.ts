@@ -11,7 +11,9 @@ const dbName = "TestEventStores";
 describe("createEventStores.ts tests", () => {
   before(async () => {
     const uri = "mongodb://localhost:27017";
-    client = await MongoClient.connect(uri, { useNewUrlParser: true });
+    client = await MongoClient.connect(uri, {
+      useUnifiedTopology: true,
+    });
 
     connector = {
       connect: async (scope, type) => client.db(dbName).collection(scope),
@@ -207,7 +209,8 @@ describe("createEventStores.ts tests", () => {
         const expected: any[] = [];
 
         // acts
-        const result = await stores.queryEventsByAggregateID(scope, type, aggregateID);
+        const cursor = await stores.queryEventsByAggregateID(scope, type, aggregateID);
+        const result = await cursor.toArray();
 
         // asserts
         expect(result).to.deep.equal(expected);
@@ -245,7 +248,8 @@ describe("createEventStores.ts tests", () => {
         }];
 
         // acts
-        const result = await stores.queryEventsByAggregateID(scope, type, aggregateID);
+        const cursor = await stores.queryEventsByAggregateID(scope, type, aggregateID);
+        const result = await cursor.toArray();
 
         // asserts
         expect(result).to.deep.equal(expected);
@@ -259,7 +263,8 @@ describe("createEventStores.ts tests", () => {
         const expected: any[] = [];
 
         // acts
-        const result = await stores.queryEventsByAggregateID(scope, type, aggregateID, { initialVersion: 0 });
+        const cursor = await stores.queryEventsByAggregateID(scope, type, aggregateID, { initialVersion: 0 });
+        const result = await cursor.toArray();
 
         // asserts
         expect(result).to.deep.equal(expected);
@@ -273,7 +278,8 @@ describe("createEventStores.ts tests", () => {
         const expected: any[] = [];
 
         // acts
-        const result = await stores.queryEventsByAggregateID(scope, type, aggregateID, { initialVersion: 0, limit: 10 });
+        const cursor = await stores.queryEventsByAggregateID(scope, type, aggregateID, { initialVersion: 0, limit: 10 });
+        const result = await cursor.toArray();
 
         // asserts
         expect(result).to.deep.equal(expected);
@@ -309,7 +315,8 @@ describe("createEventStores.ts tests", () => {
         await Promise.all(ps);
 
         // acts
-        const result = await stores.queryEventsByAggregateID(scope, type, aggregateID, { initialVersion: 0, limit: 10 });
+        const cursor = await stores.queryEventsByAggregateID(scope, type, aggregateID, { initialVersion: 0, limit: 10 });
+        const result = await cursor.toArray();
 
         // asserts
         expect(result).to.deep.equal(expected);
@@ -347,7 +354,8 @@ describe("createEventStores.ts tests", () => {
         await Promise.all(ps);
 
         // acts
-        const result = await stores.queryEventsByAggregateID(scope, type, aggregateID, { initialVersion: 5 });
+        const cursor = await stores.queryEventsByAggregateID(scope, type, aggregateID, { initialVersion: 5 });
+        const result = await cursor.toArray();
 
         // asserts
         expect(result).to.deep.equal(expected);
@@ -389,7 +397,8 @@ describe("createEventStores.ts tests", () => {
         await Promise.all(ps);
 
         // acts
-        const result = await stores.queryEventsByAggregateID(scope, type, aggregateID, { initialVersion, limit });
+        const cursor = await stores.queryEventsByAggregateID(scope, type, aggregateID, { initialVersion, limit });
+        const result = await cursor.toArray();
 
         // asserts
         expect(result.length).to.equal(limit);
@@ -478,8 +487,10 @@ describe("createEventStores.ts tests", () => {
         await stores.storeEvents(scope, [...events01, ...events02]);
 
         // asserts
-        const result01 = await stores.queryEventsByAggregateID(scope, type1, aggregateIDA);
-        const result02 = await stores.queryEventsByAggregateID(scope, type2, aggregateIDB);
+        const cursor01 = await stores.queryEventsByAggregateID(scope, type1, aggregateIDA);
+        const cursor02 = await stores.queryEventsByAggregateID(scope, type2, aggregateIDB);
+        const result01 = await cursor01.toArray();
+        const result02 = await cursor02.toArray();
 
         expect(result01).to.deep.equal(events01);
         expect(result02).to.deep.equal(events02);
