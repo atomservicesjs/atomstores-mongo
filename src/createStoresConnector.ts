@@ -1,42 +1,43 @@
-import { MongoClient, MongoClientOptions } from "mongodb";
+import { Db, MongoClient, MongoClientOptions } from "mongodb";
 import { IEventStoresConnector } from "./IEventStoresConnector";
 
 interface IStoresConnectorConfigs {
   uri?: string;
+  dbName: string;
   options?: any;
-  resolve?: (values: { scope: string; type: string; }) => {
-    database: string;
-    collection: string;
-  };
+  convert?: (values: { scope: string; type: string; }) => { collection: string; };
 }
 
 const DEFINED = {
+  convert: (values: { scope: string; type: string; }) => ({ collection: values.type }),
   options: {
     useUnifiedTopology: true,
   } as MongoClientOptions,
-  resolve: (values: { scope: string; type: string; }) => ({
-    collection: values.type,
-    database: `${values.scope.toLowerCase()}-events`,
-  }),
   uri: "mongodb://localhost:27017",
 };
 
-export const createStoresConnector = (configs: IStoresConnectorConfigs = {}): IEventStoresConnector => ((Configs): IEventStoresConnector => {
+export const createStoresConnector = (configs: IStoresConnectorConfigs = { dbName: "EventStores" }): IEventStoresConnector => ((Configs): IEventStoresConnector => {
   const {
+    dbName,
+    convert = DEFINED.convert,
     uri = DEFINED.uri,
-    resolve = DEFINED.resolve,
   } = Configs;
 
   const options = Object.assign({}, DEFINED.options, Configs.options || {});
 
   const Client = new MongoClient(uri, options);
+  let DBInstance: Db;
 
   return {
     connect: async (scope, type) => {
-      await Client.connect();
-      const { collection, database } = resolve({ scope, type });
+      const { collection } = convert({ scope, type });
 
-      return Client.db(database).collection(collection);
+      if (DBInstance) {
+        await Client.connect();
+        DBInstance = Client.db(dbName);
+      }
+
+      return DBInstance.collection(collection);
     },
   };
 })(configs);
