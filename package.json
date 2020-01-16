@@ -1,6 +1,6 @@
 {
   "name": "atomstores-mongo",
-  "version": "0.7.0-alpha.89",
+  "version": "0.7.0-alpha.90",
   "description": "Providing Event Stores Implementing MongoDB",
   "main": "./lib/index.js",
   "typings": "./typings/index.d.ts",
@@ -31,8 +31,8 @@
   "license": "MIT",
   "repository": "git+https://github.com/atomservicesjs/atomstores-mongo",
   "dependencies": {
-    "atomservicescore": "0.7.0-alpha.89",
-    "mongodb": "3.4.1"
+    "atomservicescore": "0.7.0-alpha.91",
+    "mongodb": "3.5.0"
   },
   "devDependencies": {
     "@types/mongodb": "3.3.14",
