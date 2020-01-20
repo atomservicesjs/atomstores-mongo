@@ -1,5 +1,5 @@
 import { Collection } from "mongodb";
 
-export interface IEventStoresConnector {
+export interface IStateStoresConnector {
   connect: (scope: string, type: string) => Promise<Collection>;
 }

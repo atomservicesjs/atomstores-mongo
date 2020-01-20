@@ -1,7 +1,7 @@
 import { IEventStoresCursor } from "atomservicescore";
 import { AggregationCursor, Cursor } from "mongodb";
 
-export const createCursor = {
+export const createEventCursor = {
   fromAggregation: (cursor: AggregationCursor): IEventStoresCursor => ({
     hasNext: () => cursor.hasNext(),
     next: () => cursor.next(),
@@ -14,4 +14,4 @@ export const createCursor = {
   }),
 };
 
-Object.freeze(createCursor);
+Object.freeze(createEventCursor);

@@ -1,9 +1,27 @@
 import { IEventStores } from "atomservicescore";
-import { createCursor } from "./core/createCursor";
+import { createEventCursor } from "./core/createEventCursor";
 import { IEventStoresConnector } from "./IEventStoresConnector";
 
 export const createEventStores = (connector: IEventStoresConnector): IEventStores => ((Connector): IEventStores => {
   const stores: IEventStores = {
+    countAggregateIDs: async (scope, type, options) => {
+      return 0;
+    },
+    countEvents: async (scope, type, options) => {
+      return 0;
+    },
+    fetchAggregateIDs: async (scope, type, options) => {
+      const collection = await Connector.connect(scope, type);
+      const cursor = collection.find();
+
+      return createEventCursor.fromFind(cursor);
+    },
+    fetchEvents: async (scope, type, options) => {
+      const collection = await Connector.connect(scope, type);
+      const cursor = collection.find();
+
+      return createEventCursor.fromFind(cursor);
+    },
     queryByEventID: async (scope, type, eventID) => {
       const collection = await Connector.connect(scope, type);
 
@@ -60,18 +78,12 @@ export const createEventStores = (connector: IEventStoresConnector): IEventStore
 
         const cursor = collection.aggregate(aggregate);
 
-        return createCursor.fromAggregation(cursor);
+        return createEventCursor.fromAggregation(cursor);
       } else {
         const cursor = collection.find({ aggregateID });
 
-        return createCursor.fromFind(cursor);
+        return createEventCursor.fromFind(cursor);
       }
-    },
-    queryEventsByDateTime: async (scope, type, options) => {
-      const collection = await Connector.connect(scope, type);
-      const cursor = collection.find({});
-
-      return createCursor.fromFind(cursor);
     },
     storeEvent: async (scope, event) => {
       const collection = await Connector.connect(scope, event.type);
