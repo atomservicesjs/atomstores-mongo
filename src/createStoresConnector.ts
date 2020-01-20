@@ -19,8 +19,8 @@ const DEFINED = {
 export const createStoresConnector = (configs: IStoresConnectorConfigs = { dbName: "EventStores" }): IEventStoresConnector => ((Configs): IEventStoresConnector => {
   const {
     dbName,
-    convert = DEFINED.convert,
     uri = DEFINED.uri,
+    convert = DEFINED.convert,
   } = Configs;
 
   const options = Object.assign({}, DEFINED.options, Configs.options || {});
